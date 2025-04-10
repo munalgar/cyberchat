@@ -1,18 +1,6 @@
 import * as React from "react";
-import {
-  ArchiveX,
-  Command,
-  File,
-  Inbox,
-  Send,
-  Trash2,
-  Search,
-  Home,
-  MessageSquare,
-  User,
-  Settings,
-  Package,
-} from "lucide-react";
+import { Command, Search, MessageSquare, MessagesSquare } from "lucide-react";
+import { Link, useRouter } from "@tanstack/react-router";
 
 import { NavUser } from "@/components/nav-user";
 import { Input } from "@/components/ui/input";
@@ -41,39 +29,15 @@ const data = {
   },
   navMain: [
     {
-      title: "Home",
-      url: "/",
-      icon: Home,
-      isActive: false,
-    },
-    {
-      title: "Inbox",
-      url: "/inbox",
-      icon: Inbox,
-      isActive: true,
-    },
-    {
-      title: "Messages",
-      url: "#",
+      title: "Chats",
+      url: "/chats",
       icon: MessageSquare,
       isActive: false,
     },
     {
-      title: "Files",
-      url: "#",
-      icon: File,
-      isActive: false,
-    },
-    {
-      title: "Profile",
-      url: "#",
-      icon: User,
-      isActive: false,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
+      title: "Group Chats",
+      url: "/group-chats",
+      icon: MessagesSquare,
       isActive: false,
     },
   ],
@@ -142,11 +106,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [activeItem, setActiveItem] = React.useState(data.navMain[1]); // Inbox selected by default
+  const [activeItem, setActiveItem] = React.useState(data.navMain[0]); // Default to Chats
   const [mails, setMails] = React.useState(data.mails);
   const { setOpen } = useSidebar();
   const [filterText, setFilterText] = React.useState("");
   const [showUnreadOnly, setShowUnreadOnly] = React.useState(false);
+  const router = useRouter();
 
   return (
     <div className="flex h-full">
@@ -160,11 +125,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                  <a href="/">
+                  <Link to="/">
                     <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                       <Command className="size-4" />
                     </div>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -183,6 +148,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         onClick={() => {
                           setActiveItem(item);
                           setOpen(true);
+                          router.navigate({ to: item.url });
                         }}
                         isActive={activeItem?.title === item.title}
                         className="px-2.5 md:px-2"

@@ -12,6 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as InboxImport } from './routes/inbox'
+import { Route as GroupChatsImport } from './routes/group-chats'
+import { Route as ChatsImport } from './routes/chats'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -19,6 +21,18 @@ import { Route as IndexImport } from './routes/index'
 const InboxRoute = InboxImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupChatsRoute = GroupChatsImport.update({
+  id: '/group-chats',
+  path: '/group-chats',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ChatsRoute = ChatsImport.update({
+  id: '/chats',
+  path: '/chats',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,6 +53,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/chats': {
+      id: '/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof ChatsImport
+      parentRoute: typeof rootRoute
+    }
+    '/group-chats': {
+      id: '/group-chats'
+      path: '/group-chats'
+      fullPath: '/group-chats'
+      preLoaderRoute: typeof GroupChatsImport
+      parentRoute: typeof rootRoute
+    }
     '/inbox': {
       id: '/inbox'
       path: '/inbox'
@@ -53,36 +81,46 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chats': typeof ChatsRoute
+  '/group-chats': typeof GroupChatsRoute
   '/inbox': typeof InboxRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chats': typeof ChatsRoute
+  '/group-chats': typeof GroupChatsRoute
   '/inbox': typeof InboxRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/chats': typeof ChatsRoute
+  '/group-chats': typeof GroupChatsRoute
   '/inbox': typeof InboxRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/inbox'
+  fullPaths: '/' | '/chats' | '/group-chats' | '/inbox'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inbox'
-  id: '__root__' | '/' | '/inbox'
+  to: '/' | '/chats' | '/group-chats' | '/inbox'
+  id: '__root__' | '/' | '/chats' | '/group-chats' | '/inbox'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChatsRoute: typeof ChatsRoute
+  GroupChatsRoute: typeof GroupChatsRoute
   InboxRoute: typeof InboxRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChatsRoute: ChatsRoute,
+  GroupChatsRoute: GroupChatsRoute,
   InboxRoute: InboxRoute,
 }
 
@@ -97,11 +135,19 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/chats",
+        "/group-chats",
         "/inbox"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/chats": {
+      "filePath": "chats.tsx"
+    },
+    "/group-chats": {
+      "filePath": "group-chats.tsx"
     },
     "/inbox": {
       "filePath": "inbox.tsx"
